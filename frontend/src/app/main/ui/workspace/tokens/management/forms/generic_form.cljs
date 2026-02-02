@@ -97,12 +97,12 @@
            value-subfield
            input-value-placeholder] :as props}]
 
-  (let [make-schema           (or make-schema default-make-schema)
+  (let [make-schema     (or make-schema default-make-schema)
         input-component (or input-component token.controls/input*)
-        validate-token (or validator default-validate-token)
+        validate-token  (or validator default-validate-token)
 
-        active-tab* (mf/use-state #(if (cft/is-reference? token) :reference :composite))
-        active-tab (deref active-tab*)
+        active-tab*     (mf/use-state #(if (cft/is-reference? token) :reference :composite))
+        active-tab      (deref active-tab*)
 
         token
         (mf/with-memo [token]
