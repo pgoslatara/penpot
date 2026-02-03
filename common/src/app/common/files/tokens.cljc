@@ -99,9 +99,9 @@
       e.g. it's not allowed to create a token `foo.bar` if a token `foo` already exists."
   [tokens-tree]
   [:and
+   [:string {:min 1 :max 255 :error/fn #(str (:value %) (tr "workspace.tokens.token-name-length-validation-error"))}]
    (-> cto/schema:token-name
        (sm/update-properties assoc :error/fn #(str (:value %) (tr "workspace.tokens.token-name-validation-error"))))
-   [:string {:min 1 :max 255 :error/fn #(str (:value %) (tr "workspace.tokens.token-name-length-validation-error"))}]
    [:fn {:error/fn #(tr "workspace.tokens.token-name-duplication-validation-error" (:value %))}
     #(not (ctob/token-name-path-exists? % tokens-tree))]])
 
@@ -170,8 +170,9 @@
    [:string {:min 1 :max 255 :error/fn #(str (:value %) (tr "workspace.tokens.token-name-length-validation-error"))}]
    [:fn {:error/fn #(tr "errors.token-set-already-exists" (:value %))}
     (fn [name]
-      (let [set (ctob/get-set-by-name tokens-lib name)]
-        (or (nil? set) (= (ctob/get-id set) set-id))))]])
+      (or (nil? tokens-lib)
+          (let [set (ctob/get-set-by-name tokens-lib name)]
+            (or (nil? set) (= (ctob/get-id set) set-id)))))]])
 
 (def schema:token-set-description
   [:string {:max 2048 :error/fn #(tr "errors.field-max-length" 2048)}])
@@ -196,8 +197,9 @@
    [:string {:min 0 :max 255 :error/fn #(str (:value %) (tr "workspace.tokens.token-name-length-validation-error"))}]
    [:fn {:error/fn #(tr "errors.token-theme-already-exists" (:value %))}
     (fn [group]
-      (let [theme (ctob/get-theme-by-name tokens-lib group name)]
-        (or (nil? theme) (= (:id theme) theme-id))))]])
+      (or (nil? tokens-lib)
+          (let [theme (ctob/get-theme-by-name tokens-lib group name)]
+            (or (nil? theme) (= (:id theme) theme-id)))))]])
 
 (defn make-token-theme-name-schema
   "Generates a dynamic schema to check a token theme name:
@@ -208,8 +210,9 @@
    [:string {:min 1 :max 255 :error/fn #(str (:value %) (tr "workspace.tokens.token-name-length-validation-error"))}]
    [:fn {:error/fn #(tr "errors.token-theme-already-exists" (str group "/" (:value %)))}
     (fn [name]
-      (let [theme (ctob/get-theme-by-name tokens-lib group name)]
-        (or (nil? theme) (= (:id theme) theme-id))))]])
+      (or (nil? tokens-lib)
+          (let [theme (ctob/get-theme-by-name tokens-lib group name)]
+            (or (nil? theme) (= (:id theme) theme-id)))))]])
 
 (def schema:token-theme-description
   [:string {:max 2048 :error/fn #(tr "errors.field-max-length" 2048)}])

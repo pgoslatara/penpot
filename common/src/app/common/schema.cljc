@@ -99,7 +99,8 @@
   ([s k v]
    (assoc-key s k {} v))
   ([s k opts v]  ;; change order of opts and v to match static schema defintions (e.g. [:something {:optional true} ::sm/integer])
-   (let [s (schema s)]
+   (let [s (schema s)
+         v (schema v)]
      (if (= (m/type s) :map)
        (mu/assoc s k v opts)
        (if-let [path (mu/find-first s (fn [s' path _] (when (= (m/type s') :map) path)))]

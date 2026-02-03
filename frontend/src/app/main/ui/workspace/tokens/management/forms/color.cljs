@@ -48,9 +48,14 @@
            (nil? (cto/token-value-self-reference? name value))))]]))
 
 (mf/defc form*
-  [{:keys [token-type] :as props}]
+  [{:keys [token token-type] :as props}]
   (let [props (mf/spread-props props {:make-schema #(-> (cfo/make-token-schema %1 token-type)
                                                         (sm/dissoc-key :id)
-                                                        (sm/assoc-key :color-result {:optional true} :any))
+                                                        (sm/assoc-key :color-result :string))
+                                      :initial {:type token-type
+                                                :name (:name token "")
+                                                :value (:value token "")
+                                                :description (:description token "")
+                                                :color-result ""}
                                       :input-component token.controls/color-input*})]
     [:> generic/form* props]))

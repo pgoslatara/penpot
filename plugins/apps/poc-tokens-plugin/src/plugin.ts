@@ -1,5 +1,9 @@
 import type { PluginMessageEvent, PluginUIEvent } from './model.js';
-import { TokenType, TokenProperty } from '@penpot/plugin-types';
+import {
+  TokenType,
+  TokenProperty,
+  TokenValueString,
+} from '@penpot/plugin-types';
 
 penpot.ui.open('Design Tokens test', `?theme=${penpot.theme}`, {
   width: 1000,
@@ -145,7 +149,7 @@ function addToken(
   const token = set?.addToken({
     type: tokenType as TokenType,
     name: tokenName,
-    value: tokenValue,
+    value: tokenValue as TokenValueString,
   });
   if (token) {
     // TODO: remove this timeout when styleDictionary is replaced

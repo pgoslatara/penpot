@@ -41,7 +41,7 @@
                                                         (sm/dissoc-key :id)
                                                         ;; The value as edited in the form is a simple stirng.
                                                         ;; It's converted to vector in the validator.
-                                                        (sm/assoc-key :value :string))
+                                                        (sm/assoc-key :value cfo/schema:token-value-generic))
                                       :validator validate-font-family-token
                                       :input-component token.controls/fonts-combobox*})]
     [:> generic/form* props]))
