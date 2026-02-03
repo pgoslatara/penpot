@@ -262,7 +262,7 @@ export class AppComponent {
         setId: this.currentSetId,
         tokenId,
         // properties: ['strokeColor']   // Uncomment to choose attribute to apply
-      });                                // (incompatible attributes will have no effect)
+      }); // (incompatible attributes will have no effect)
     }
   }
 

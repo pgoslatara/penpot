@@ -120,8 +120,7 @@ function loadTokens(setId: string) {
 
 function addTheme(themeGroup: string, themeName: string) {
   const tokensCatalog = penpot.library.local.tokens;
-  const theme = tokensCatalog?.addTheme({group: themeGroup,
-                                         name: themeName });
+  const theme = tokensCatalog?.addTheme({ group: themeGroup, name: themeName });
   if (theme) {
     loadLibrary();
   }
@@ -129,7 +128,7 @@ function addTheme(themeGroup: string, themeName: string) {
 
 function addSet(setName: string) {
   const tokensCatalog = penpot.library.local.tokens;
-  const set = tokensCatalog?.addSet({name: setName});
+  const set = tokensCatalog?.addSet({ name: setName });
   if (set) {
     loadLibrary();
   }
@@ -143,9 +142,11 @@ function addToken(
 ) {
   const tokensCatalog = penpot.library.local.tokens;
   const set = tokensCatalog?.getSetById(setId);
-  const token = set?.addToken({type: tokenType as TokenType,
-                               name: tokenName,
-                               value: tokenValue});
+  const token = set?.addToken({
+    type: tokenType as TokenType,
+    name: tokenName,
+    value: tokenValue,
+  });
   if (token) {
     // TODO: remove this timeout when styleDictionary is replaced
     // with tokenScript and the token validation is syncrhronous.

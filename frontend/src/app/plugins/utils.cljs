@@ -17,7 +17,6 @@
    [app.main.data.helpers :as dsh]
    [app.main.store :as st]
    [app.util.object :as obj]
-   [cljs.stacktrace :as stk]
    [cuerdas.core :as str]))
 
 (defn locate-file
