@@ -20,6 +20,7 @@
    [beicon.v2.core :as rx]
    [cuerdas.core :as str]
    [goog.object :as gobj]
+   [potok.v2.core :as ptk]
    [lambdaisland.uri :as u]
    [okulary.core :as l]))
 
@@ -97,9 +98,8 @@
 
 ;; IMPORTANT: Only TTF fonts can be stored.
 (defn- store-font-buffer
-  [shape-id font-data font-array-buffer emoji? fallback?]
+  [font-data font-array-buffer emoji? fallback?]
   (let [font-id-buffer  (:family-id-buffer font-data)
-        shape-id-buffer (uuid/get-u32 shape-id)
         size (.-byteLength font-array-buffer)
         ptr  (h/call wasm/internal-module "_alloc_bytes" size)
         heap (gobj/get ^js wasm/internal-module "HEAPU8")
@@ -107,10 +107,6 @@
 
     (.set mem (js/Uint8Array. font-array-buffer))
     (h/call wasm/internal-module "_store_font"
-            (aget shape-id-buffer 0)
-            (aget shape-id-buffer 1)
-            (aget shape-id-buffer 2)
-            (aget shape-id-buffer 3)
             (aget font-id-buffer 0)
             (aget font-id-buffer 1)
             (aget font-id-buffer 2)
@@ -119,24 +115,35 @@
             (:style font-data)
             emoji?
             fallback?)
-
-    (update-text-layout shape-id)
-
     true))
+
+;; This variable will store the fonts that are currently being fetched
+;; so we don't fetch more than once the same font
+(def fetching (atom #{}))
 
 (defn- fetch-font
   [shape-id font-data font-url emoji? fallback?]
-  {:key font-url
-   :callback #(->> (http/send! {:method :get
-                                :uri font-url
-                                :response-type :buffer})
-                   (rx/map (fn [{:keys [body]}]
-                             (store-font-buffer shape-id font-data body emoji? fallback?)))
-                   (rx/catch (fn [cause]
-                               (log/error :hint "Could not fetch font"
-                                          :font-url font-url
-                                          :cause cause)
-                               (rx/empty))))})
+  (when-not (contains? @fetching font-url)
+    (swap! fetching conj font-url)
+    {:key font-url
+     :callback
+     (fn []
+       (->> (http/send! {:method :get
+                         :uri font-url
+                         :response-type :buffer})
+            (rx/map (fn [{:keys [body]}]
+                      (swap! fetching disj font-url)
+                      (store-font-buffer font-data body emoji? fallback?)
+                      (update-text-layout shape-id)
+                      ;; TODO: Emit font fetched event
+                      (prn ">>Fetched" font-data)
+                      (ptk/data-event :wasm-text/font-fetched {:font font-data})))
+            (rx/catch (fn [cause]
+                        (swap! fetching disj font-url)
+                        (log/error :hint "Could not fetch font"
+                                   :font-url font-url
+                                   :cause cause)
+                        (rx/empty)))))}))
 
 (defn- google-font-ttf-url
   [font-id font-variant-id font-weight font-style]
@@ -155,20 +162,29 @@
     :builtin
     (dm/str (u/join cf/public-uri "fonts/" asset-id))))
 
+(defn font-stored?
+  [font-data emoji?]
+  (let [id-buffer (uuid/get-u32 (:wasm-id font-data))]
+    (not= 0 (h/call wasm/internal-module "_is_font_uploaded"
+                    (aget id-buffer 0)
+                    (aget id-buffer 1)
+                    (aget id-buffer 2)
+                    (aget id-buffer 3)
+                    (:weight font-data)
+                    (:style font-data)
+                    emoji?))))
+
 (defn- store-font-id
   [shape-id font-data asset-id emoji? fallback?]
   (when asset-id
-    (let [uri (font-id->ttf-url (:font-id font-data) asset-id (:font-variant-id font-data) (:weight font-data) (:style-name font-data))
+    (let [uri (font-id->ttf-url
+               (:font-id font-data) asset-id
+               (:font-variant-id font-data)
+               (:weight font-data)
+               (:style-name font-data))
           id-buffer (uuid/get-u32 (:wasm-id font-data))
           font-data (assoc font-data :family-id-buffer id-buffer)
-          font-stored? (not= 0 (h/call wasm/internal-module "_is_font_uploaded"
-                                       (aget id-buffer 0)
-                                       (aget id-buffer 1)
-                                       (aget id-buffer 2)
-                                       (aget id-buffer 3)
-                                       (:weight font-data)
-                                       (:style font-data)
-                                       emoji?))]
+          font-stored? (font-stored? font-data emoji?)]
       (when-not font-stored?
         (fetch-font shape-id font-data uri emoji? fallback?)))))
 
@@ -280,8 +296,8 @@
     "regular"
     font-variant-id))
 
-(defn store-font
-  [shape-id font]
+(defn make-font-data
+  [font]
   (let [font-id (get font :font-id)
         font-variant-id (get font :font-variant-id)
         normalized-variant-id (when font-variant-id
@@ -307,7 +323,14 @@
                    :font-variant-id variant-id
                    :style (serialize-font-style style)
                    :style-name style
-                   :weight weight}]
+                   :weight weight
+                   :emoji? emoji?
+                   :fallbck? fallback?
+                   :asset-id asset-id}]))
+
+(defn store-font
+  [shape-id font]
+  (let [{:keys [asset-id emoji? fallback?] :as font-data} (make-font-data font)]
     (store-font-id shape-id font-data asset-id emoji? fallback?)))
 
 ;; FIXME: This is a temporary function to load the fallback fonts for the editor.

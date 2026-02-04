@@ -10,6 +10,7 @@
   This exists to avoid circular deps:
   workspace.texts -> workspace.libraries -> workspace.texts"
   (:require
+   [app.common.data.macros :as dm]
    [app.common.files.helpers :as cfh]
    [app.common.geom.matrix :as gmt]
    [app.common.geom.point :as gpt]
@@ -17,6 +18,7 @@
    [app.main.data.helpers :as dsh]
    [app.main.data.workspace.modifiers :as dwm]
    [app.render-wasm.api :as wasm.api]
+   [app.render-wasm.api.fonts :as wasm.fonts]
    [beicon.v2.core :as rx]
    [potok.v2.core :as ptk]))
 
@@ -102,24 +104,40 @@
 
       ptk/WatchEvent
       (watch [_ state stream]
-        (if (= (::resize-wasm-text-debounce-event state) cur-event)
-          (let [stopper (->> stream (rx/filter (ptk/type? :app.main.data.workspace/finalize)))]
-            (rx/concat
-             (rx/merge
-              (->> stream
-                   (rx/filter (ptk/type? ::resize-wasm-text-debounce))
-                   (rx/debounce 20)
-                   (rx/take 1)
-                   (rx/delay 200)
-                   (rx/map #(resize-wasm-text-debounce-commit))
-                   (rx/take-until stopper))
+        (let [page-id (:current-page-id state)
+              objects (dsh/lookup-page-objects state page-id)
+              content (dm/get-in objects [id :content])
+              fonts   (wasm.fonts/get-content-fonts content)
+              fonts-loaded?
+              (->> fonts
+                   (every?
+                    (fn [font]
+                      (let [font-data (wasm.fonts/make-font-data font)]
+                        (wasm.fonts/font-stored? font-data (:emoji? font-data))))))]
+          (cond
+            (not fonts-loaded?)
+            (->> (rx/of (resize-wasm-text-debounce id))
+                 (rx/delay 20))
 
-              (rx/of (resize-wasm-text-debounce id)))
+            (= (::resize-wasm-text-debounce-event state) cur-event)
+            (let [stopper (->> stream (rx/filter (ptk/type? :app.main.data.workspace/finalize)))]
+              (rx/concat
+               (rx/merge
+                (->> stream
+                     (rx/filter (ptk/type? ::resize-wasm-text-debounce))
+                     (rx/debounce 20)
+                     (rx/take 1)
+                     ;; (rx/delay 200)
+                     (rx/map #(resize-wasm-text-debounce-commit))
+                     (rx/take-until stopper))
 
-             (rx/of #(dissoc %
-                             ::resize-wasm-text-debounce-ids
-                             ::resize-wasm-text-debounce-event))))
-          (rx/empty))))))
+                (rx/of (resize-wasm-text-debounce id)))
+
+               (rx/of #(dissoc %
+                               ::resize-wasm-text-debounce-ids
+                               ::resize-wasm-text-debounce-event))))
+            :else
+            (rx/empty)))))))
 
 (defn resize-wasm-text-all
   "Resize all text shapes (auto-width/auto-height) from a collection of ids."
