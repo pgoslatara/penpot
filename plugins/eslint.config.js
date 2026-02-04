@@ -25,7 +25,10 @@ export default [
       },
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
       'no-multiple-empty-lines': ['error', { max: 1 }],
       quotes: ['error', 'single', { avoidEscape: true }],
     },

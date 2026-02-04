@@ -36,8 +36,16 @@
           "configurations": {
             "production": {
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
               ],
               "outputHashing": "all"
             },
@@ -96,8 +104,16 @@
           "configurations": {
             "production": {
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
               ],
               "outputHashing": "all"
             },
@@ -156,8 +172,16 @@
           "configurations": {
             "production": {
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
               ],
               "outputHashing": "all"
             },
@@ -172,7 +196,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": { "buildTarget": "lorem-ipsum-plugin:build:production" },
+            "production": {
+              "buildTarget": "lorem-ipsum-plugin:build:production"
+            },
             "development": {
               "buildTarget": "lorem-ipsum-plugin:build:development",
               "host": "0.0.0.0",
@@ -216,8 +242,16 @@
           "configurations": {
             "production": {
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
               ],
               "outputHashing": "all"
             },
@@ -276,8 +310,16 @@
           "configurations": {
             "production": {
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
               ],
               "outputHashing": "all"
             },
@@ -292,7 +334,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": { "buildTarget": "rename-layers-plugin:build:production" },
+            "production": {
+              "buildTarget": "rename-layers-plugin:build:production"
+            },
             "development": {
               "buildTarget": "rename-layers-plugin:build:development",
               "host": "0.0.0.0",
@@ -336,8 +380,16 @@
           "configurations": {
             "production": {
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
               ],
               "outputHashing": "all"
             },
@@ -352,7 +404,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": { "buildTarget": "colors-to-tokens-plugin:build:production" },
+            "production": {
+              "buildTarget": "colors-to-tokens-plugin:build:production"
+            },
             "development": {
               "buildTarget": "colors-to-tokens-plugin:build:development",
               "host": "0.0.0.0",
@@ -395,8 +449,16 @@
           "configurations": {
             "production": {
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-                { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
               ],
               "outputHashing": "all"
             },
@@ -411,7 +473,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": { "buildTarget": "poc-state-plugin:build:production" },
+            "production": {
+              "buildTarget": "poc-state-plugin:build:production"
+            },
             "development": {
               "buildTarget": "poc-state-plugin:build:development",
               "host": "0.0.0.0",

@@ -32,11 +32,6 @@ export default defineConfig({
     }),
   ],
 
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
-
   // Configuration for building your library.
   // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
@@ -67,9 +62,6 @@ export default defineConfig({
   test: {
     watch: false,
     globals: true,
-    cache: {
-      dir: '../node_modules/.vitest',
-    },
     environment: 'happy-dom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 

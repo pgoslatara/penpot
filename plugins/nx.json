@@ -2,7 +2,11 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "plugins": [],
   "release": {
-    "projects": ["libs/plugins-runtime", "libs/plugins-styles", "libs/plugin-types"],
+    "projects": [
+      "libs/plugins-runtime",
+      "libs/plugins-styles",
+      "libs/plugin-types"
+    ],
     "projectsRelationship": "independent",
     "changelog": {
       "workspaceChangelog": false,
