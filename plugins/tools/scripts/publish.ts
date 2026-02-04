@@ -62,7 +62,7 @@ const determineArgs = async () => {
   });
 
   execSync(
-    'npx nx run-many -t build -p plugins-runtime plugins-styles plugin-types --parallel',
+    'pnpm --filter @penpot/plugins-runtime --filter @penpot/plugin-styles --filter @penpot/plugin-types build',
     {
       cwd: process.cwd(),
       stdio: 'inherit',

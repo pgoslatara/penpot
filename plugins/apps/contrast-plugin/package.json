@@ -1,0 +1,12 @@
+{
+  "name": "contrast-plugin",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "ng build contrast-plugin",
+    "build:dev": "ng build contrast-plugin --configuration development",
+    "serve": "ng serve contrast-plugin",
+    "lint": "eslint .",
+    "test": "vitest"
+  }
+}
