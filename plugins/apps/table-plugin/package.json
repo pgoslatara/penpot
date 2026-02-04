@@ -2,6 +2,7 @@
   "name": "table-plugin",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "ng build table-plugin",
     "build:dev": "ng build table-plugin --configuration development",

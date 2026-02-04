@@ -43,6 +43,7 @@ export default [
     languageOptions: {
       parser: angularTemplateParser,
     },
+    processor: '@angular-eslint/template/extract-inline-html',
     rules: {},
   },
   { ignores: ['**/assets/*.js'] },

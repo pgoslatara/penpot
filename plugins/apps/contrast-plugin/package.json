@@ -2,6 +2,7 @@
   "name": "contrast-plugin",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "ng build contrast-plugin",
     "build:dev": "ng build contrast-plugin --configuration development",

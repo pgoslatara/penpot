@@ -1,5 +1,4 @@
 import baseConfig from '../../eslint.config.js';
-import tseslint from 'typescript-eslint';
 import angular from '@angular-eslint/eslint-plugin';
 import angularTemplate from '@angular-eslint/eslint-plugin-template';
 import angularTemplateParser from '@angular-eslint/template-parser';
@@ -44,6 +43,7 @@ export default [
     languageOptions: {
       parser: angularTemplateParser,
     },
+    processor: '@angular-eslint/template/extract-inline-html',
     rules: {},
   },
   { ignores: ['**/assets/*.js'] },

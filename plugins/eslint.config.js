@@ -5,7 +5,10 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default [
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: config.files || ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+  })),
   eslintConfigPrettier,
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],

@@ -2,6 +2,7 @@
   "name": "icons-plugin",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "ng build icons-plugin",
     "build:dev": "ng build icons-plugin --configuration development",
